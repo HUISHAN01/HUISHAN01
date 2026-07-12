@@ -1,0 +1,12 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Auto push on save",
+      "type": "shell",
+      "command": "npm run auto:push",
+      "isBackground": true,
+      "problemMatcher": []
+    }
+  ]
+}

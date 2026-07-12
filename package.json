@@ -1,0 +1,20 @@
+{
+  "name": "playwright-automation",
+  "version": "1.0.0",
+  "description": "UI Automation using Playwright",
+  "main": "index.js",
+  "scripts": {
+    "test": "playwright test",
+    "test:ui": "playwright test --ui",
+    "test:debug": "playwright test --debug",
+    "test:headed": "playwright test --headed",
+    "auto:push": "node scripts/auto-push.js",
+    "check:merge-safety": "node scripts/check-merge-safety.js"
+  },
+  "keywords": ["playwright", "automation", "testing"],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/test": "^1.48.0"
+  }
+}
