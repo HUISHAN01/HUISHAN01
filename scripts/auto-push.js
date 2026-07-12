@@ -96,15 +96,26 @@ function commitAndPush() {
 
     try {
       const branch = run('git branch --show-current').trim() || 'master';
-      run(`gh pr list --head ${branch} --state open --json number >/dev/null 2>&1`);
-      console.log('A pull request already exists for this branch.');
-    } catch (error) {
-      try {
-        run(`gh pr create --head ${branch} --title "Auto-save changes" --body "Automated PR created by the workspace watcher."`);
-        console.log('Pull request created.');
-      } catch (prError) {
-        console.log('GitHub CLI is not authenticated or PR creation failed.');
+      const ghPath = process.platform === 'win32' ? 'gh.exe' : 'gh';
+      const ghAvailable = require('child_process').spawnSync(ghPath, ['--version'], { stdio: 'ignore' }).status === 0;
+      if (!ghAvailable) {
+        console.log('GitHub CLI is not installed, so PR creation was skipped.');
+        return;
       }
+
+      try {
+        run(`gh pr list --head ${branch} --state open --json number >/dev/null 2>&1`);
+        console.log('A pull request already exists for this branch.');
+      } catch (error) {
+        try {
+          run(`gh pr create --head ${branch} --title "Auto-save changes" --body "Automated PR created by the workspace watcher."`);
+          console.log('Pull request created.');
+        } catch (prError) {
+          console.log('PR creation failed. Authenticate GitHub CLI or create the PR manually.');
+        }
+      }
+    } catch (error) {
+      console.log('PR creation step skipped.');
     }
   } catch (error) {
     console.error('Automation failed:');
